@@ -92,6 +92,7 @@ ChinaNewCasesPct2021 = ChinaNewCasesPct(347:end,:);
 IndiaNewCases2021 = IndiaNewCases(347:end,:);
 IndiaNewCasesPct2021 = IndiaNewCasesPct(347:end,:);
 
+%%
 %Cross Correlations
 [C4, lag4] = xcorr(PhNewCasesPct2021,ChinaNewCasesPct2021);
 [C5, lag5] = xcorr(PhNewCasesPct2021,IndiaNewCasesPct2021);
@@ -162,12 +163,22 @@ IndiaLag41Days = IndiaNewCasesPct(42:end,:);
 [Ctest3,lagtest3] = xcorr(ChinaCut41Days,IndiaLag41Days);
 figure('Name','Correlation Test India Lag 41 days vs. China'); plot(lagtest3,Ctest3);
 
+%% Scatter Plot Orig
+figure('Name','Ph vs. China');
+scatter(PhNewCasesPct,ChinaNewCasesPct);
+
+figure('Name','Ph vs. India');
+scatter(PhNewCasesPct,IndiaNewCasesPct);
+
+figure('Name','China vs. India');
+scatter(ChinaNewCasesPct,IndiaNewCasesPct);
+
 %% Scatter Plot || Additional Visualization
 figure('Name','Scatter Plot: Ph Lag 54 Days');
-scatter(PhLead54Days,ChinaCut54Days); hold on; 
+scatter(PhLead54Days,ChinaCut54Days); 
 
 figure('Name','Scatter Plot: Ph Lag 13 Days');
-scatter(PhLead14Days,IndiaCut14Days); hold on; 
+scatter(PhLead14Days,IndiaCut14Days);  
 
 figure('Name','Scatter Plot: India Lead 41 Days');
-scatter(ChinaCut41Days,IndiaLag41Days); hold on; 
+scatter(ChinaCut41Days,IndiaLag41Days); 
