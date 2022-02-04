@@ -1,0 +1,54 @@
+%% Initialization
+% dataset = readmatrix('test_dataset');
+% opts = detectImportOptions('test_dataset.xlsx');
+% preview('test_dataset.xlsx',opts)
+% opts.Sheet = '2020'
+% opts.SelectedVariableNames = {'new_cases_pct'}
+% dataset = readmatrix('test_dataset');
+
+%% Initialization
+%clear all;
+close all;
+
+%%  Since Start of COVID; summary plot
+figure('Name','Plot Summary of COVID Cases');
+subplot(3,3,1); plot(ChinaNewCases); title('China New Cases');
+subplot(3,3,2); plot(PhNewCases); title('Ph New Cases');
+subplot(3,3,3); plot(IndiaNewCases); title('India New Cases');
+
+subplot(3,3,4); plot(ChinaNewCasesPct); title('% Change');
+subplot(3,3,5); plot(PhNewCasesPct); title('% Change');
+subplot(3,3,6); plot(IndiaNewCasesPct); title('% Change');
+
+%% Cross Correlations
+[C1, lag1] = xcorr(PhNewCasesPct,ChinaNewCasesPct);
+[C2, lag2] = xcorr(PhNewCasesPct,IndiaNewCasesPct);
+[C3, lag3] = xcorr(ChinaNewCasesPct,IndiaNewCasesPct);
+
+figure('Name','PH vs. China New Cases Cross Correlation');
+C1_New = C1./max(abs(C1(:)));
+plot(lag1,C1_New);
+
+figure('Name','PH vs. India New Cases Cross Correlation');
+C2_New = C2./max(abs(C2(:)));
+plot(lag2,C2_New);
+
+figure('Name','China vs. India New Cases Cross Correlation');
+C3_New = C3./max(abs(C3(:)));
+plot(lag3,C3_New);
+
+%% 2021 to Current
+2021ChinaNewCases = ChinaNewCases(34:
+
+
+%% Table Comparisons
+% figure('Name','PH vs. China Raw New Cases');
+% plot(ChinaNewCases); hold on; plot(PhNewCases); hold off; 
+% legend('China','Ph');
+
+%%
+% 
+% [rho,pval] = corr(phnewcasespct,chinanewcasespct,'type','Spearman');
+% 
+% b1 = phnewcasespct/chinanewcasespct;
+% figure(6); scatter(phnewcasespct,chinanewcasespct);
