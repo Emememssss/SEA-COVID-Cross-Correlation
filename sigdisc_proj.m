@@ -1,3 +1,9 @@
+
+%% Initialization
+%clear all;
+clc;
+close all;
+
 %% Import data from spreadsheet
 % Script for importing data from the following spreadsheet:
 %
@@ -43,16 +49,12 @@ IndiaNewDeathPct = tbl.IndiaNewDeathPct;
 %% Clear temporary variables
 clear opts tbl
 
-%% Initialization
-%clear all;
-clc;
-close all;
-
 %%  Since Start of COVID; summary plot
 figure('Name','Plot Summary of COVID Cases');
-subplot(3,3,1); plot(ChinaNewCases); title('China New Cases');
-subplot(3,3,2); plot(PhNewCases); title('Ph New Cases');
-subplot(3,3,3); plot(IndiaNewCases); title('India New Cases');
+
+subplot(3,3,1); plot(datetime(Date),ChinaNewCases); title('China New Cases');
+subplot(3,3,2); plot(datetime(Date),PhNewCases); title('Ph New Cases');
+subplot(3,3,3); plot(datetime(Date),IndiaNewCases); title('India New Cases');
 
 subplot(3,3,4); plot(ChinaNewCasesPct); title('% Change');
 subplot(3,3,5); plot(PhNewCasesPct); title('% Change');
@@ -133,11 +135,34 @@ legend('China','India');
 % [rho2,pval2] = corr(PhNewCasesPct2021,IndiaNewCasesPct2021,'type','Spearman');
 % [rho3,pval3] = corr(ChinaNewCasesPct2021,IndiaNewCasesPct2021,'type','Spearman');
 
-% PH lead of 54 days
-PhTest = PhNewCasesPct(55:end,:)
-ChinaTest = ChinaNewCasesPct(1:end-54,:);
-[rhotest,pvaltest] = corr(PhTest,ChinaTest,'type','Pearson');
-[C4test, lag4test] = xcorr(PhTest,ChinaTest);
-figure(999); plot(lag4test,C4test);
-figure(1000); plot(ChinaTest); hold on; plot(PhTest,'g'); hold off;
+% PH lag of 54 days   \\ lead variable because we adjusted ph
+PhLead54Days = PhNewCasesPct(55:end,:)
+ChinaCut54Days = ChinaNewCasesPct(1:end-54,:);
+[rhotest,pvaltest] = corr(PhLead54Days,ChinaCut54Days,'type','Pearson');
+[Ctest, lagtest] = xcorr(PhLead54Days,ChinaCut54Days);
+figure('Name','Correlation Test PH Lead 54 Days vs. China'); plot(lagtest,Ctest);
+%figure('Name','PH Lead 54 Days Adjusted Plot' ); plot(ChinaAdjust54Days); hold on; plot(PhLead54Days,'g'); hold off;
 
+% PH lag of 13 days     \\ lead variable because we adjusted ph
+PhLead14Days = PhNewCasesPct(14:end,:);
+IndiaCut14Days = IndiaNewCasesPct(1:end-13,:);
+[rhotest2,pvaltest2] = corr(PhLead14Days,IndiaCut14Days,'type','Pearson');
+[Ctest2, lagtest2] = xcorr(PhLead14Days,IndiaCut14Days);
+figure('Name','Correlation Test PH Lead 13 Days vs. India'); plot(lagtest2,Ctest2);
+
+%India lead of 41 days
+ChinaCut41Days = ChinaNewCasesPct(1:end-41,:);
+IndiaLag41Days = IndiaNewCasesPct(42:end,:);
+[rhotest3,pvaltest3] = corr(ChinaCut41Days,IndiaLag41Days,'type','Pearson');
+[Ctest3,lagtest3] = xcorr(ChinaCut41Days,IndiaLag41Days);
+figure('Name','Correlation Test India Lag 41 days vs. China'); plot(lagtest3,Ctest3);
+
+%% Scatter Plot || Additional Visualization
+figure('Name','Scatter Plot: Ph Lag 54 Days');
+scatter(PhLead54Days,ChinaCut54Days); hold on; 
+
+figure('Name','Scatter Plot: Ph Lag 13 Days');
+scatter(PhLead14Days,IndiaCut14Days); hold on; 
+
+figure('Name','Scatter Plot: India Lead 41 Days');
+scatter(ChinaCut41Days,IndiaLag41Days); hold on; 
