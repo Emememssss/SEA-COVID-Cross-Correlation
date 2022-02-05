@@ -28,7 +28,7 @@ opts = setvaropts(opts, "Date", "WhitespaceRule", "preserve");
 opts = setvaropts(opts, "Date", "EmptyFieldRule", "auto");
 opts = setvaropts(opts, ["PhNewCases", "PhNewCasesPct", "PhNewDeath", "PhNewDeathPct", "ChinaNewCases", "ChinaNewCasesPct", "ChinaNewDeath", "ChinaNewDeathPct", "IndiaNewCases", "IndiaNewCasesPct", "IndiaNewDeath", "IndiaNewDeathPct"], "FillValue", 0);
 
-% Import the data
+% Import the data    ||   please select the address of the excel file based on your computer.
 tbl = readtable("/Users/allanemmanuelumali/Desktop/SEA COVID Cross-Correlation/Sigdisc Final Dataset 1.xlsx", opts, "UseExcel", false);
 
 %% Convert to output type
@@ -156,7 +156,7 @@ IndiaCut14Days = IndiaNewCasesPct(1:end-13,:);
 [Ctest2, lagtest2] = xcorr(PhLead14Days,IndiaCut14Days);
 figure('Name','Correlation Test PH Lead 13 Days vs. India'); plot(lagtest2,Ctest2);
 
-%India lead of 41 days
+%China lead of 41 days
 ChinaCut41Days = ChinaNewCasesPct(1:end-41,:);
 IndiaLag41Days = IndiaNewCasesPct(42:end,:);
 [rhotest3,pvaltest3] = corr(ChinaCut41Days,IndiaLag41Days,'type','Pearson');
@@ -180,7 +180,7 @@ scatter(PhLead54Days,ChinaCut54Days);
 figure('Name','Scatter Plot: Ph Lag 13 Days');
 scatter(PhLead14Days,IndiaCut14Days);  
 
-figure('Name','Scatter Plot: India Lead 41 Days');
+figure('Name','Scatter Plot: China Lead 41 Days');
 scatter(ChinaCut41Days,IndiaLag41Days); 
 
 
